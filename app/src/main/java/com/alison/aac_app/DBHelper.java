@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String TAG = "DatabaseHelper";
     private final Context myContext;
     private static final String DATABASE_NAME = "aacDB.sqlite3";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private final String pathToSaveDBFile;
 
 
