@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import com.squareup.picasso.Picasso;
+
 public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapter.RecyclerViewHolder> {
 
     private ArrayList<String> wordsArrayList;
@@ -38,11 +40,17 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
         // Set the data to textview and imageview.
         String recyclerData = wordsArrayList.get(position);
         holder.word.setText(recyclerData);
-        holder.image.setImageResource(R.drawable.ic_launcher_foreground);
+        //holder.image.setImageResource(R.drawable.ic_launcher_foreground);
+        if (holder.image != null)
+        {
+            Picasso
+                    .get()
+                    .load("https://img.icons8.com/stickers/100/image.png") //url
+                    .into(holder.image);
+        }
+
     }
 
-
-    @Override
     public int getItemCount() {
         // this method returns the size of recyclerview
         return wordsArrayList.size();
