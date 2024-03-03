@@ -19,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String TAG = "DatabaseHelper";
     private final Context myContext;
     private static final String DATABASE_NAME = "aacDB.sqlite3";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 6;
     private final String pathToSaveDBFile;
 
 
@@ -98,7 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public List<String> getWords() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT * FROM words";
+        String query = "SELECT word FROM words";
         Cursor cursor = db.rawQuery(query, null);
         List<String> list = new ArrayList<>();
         while(cursor.moveToNext()) {
@@ -106,6 +106,22 @@ public class DBHelper extends SQLiteOpenHelper {
             word = cursor.getString(0);
             list.add(word);
         }
+        cursor.close();
+        db.close();
+        return list;
+    }
+
+    public List<String> getImages() {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+        String query = "SELECT image FROM words";
+        Cursor cursor = db.rawQuery(query, null);
+        List<String> list = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            String image;
+            image = cursor.getString(0);
+            list.add(image);
+        }
+        cursor.close();
         db.close();
         return list;
     }
@@ -117,6 +133,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         int v =  cursor.getInt(0);
+        cursor.close();
         db.close();
         return v;
     }

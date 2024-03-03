@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/DarkGreen"
-    tools:context=".MainActivity">
+    tools:context=".activities.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
-        android:name="com.alison.aac_app.BuildFragment"
+        android:name="com.alison.aac_app.fragments.BuildFragment"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,13 +55,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="26dp"
-        android:layout_marginEnd="155dp"
         android:layout_marginBottom="337dp"
         android:backgroundTint="@color/Vermilion"
         android:text="Generate"
         android:textColor="@color/DarkGreen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.823"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

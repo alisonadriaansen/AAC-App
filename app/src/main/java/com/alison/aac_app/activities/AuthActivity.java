@@ -1,10 +1,12 @@
-package com.alison.aac_app;
+package com.alison.aac_app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.alison.aac_app.R;
 
 public class AuthActivity extends AppCompatActivity {
 

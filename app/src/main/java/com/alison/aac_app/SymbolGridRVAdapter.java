@@ -12,16 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapter.RecyclerViewHolder> {
 
     private ArrayList<String> wordsArrayList;
+    private ArrayList<String> imagesArrayList;
     private Context mcontext;
 
 
-    public SymbolGridRVAdapter(ArrayList<String> recyclerDataArrayList, Context mcontext) {
+    public SymbolGridRVAdapter(ArrayList<String> recyclerDataArrayList, ArrayList<String> imageUrlArrayList, Context mcontext) {
         this.wordsArrayList = recyclerDataArrayList;
+        this.imagesArrayList = imageUrlArrayList;
         this.mcontext = mcontext;
     }
 
@@ -40,12 +43,15 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
         // Set the data to textview and imageview.
         String recyclerData = wordsArrayList.get(position);
         holder.word.setText(recyclerData);
-        //holder.image.setImageResource(R.drawable.ic_launcher_foreground);
-        if (holder.image != null)
+        String url = imagesArrayList.get(position);
+        if ((holder.image != null) && (!url.equals("No hits")))
         {
-            Picasso
-                    .get()
-                    .load("https://img.icons8.com/stickers/100/image.png") //url
+            Glide
+                    .with(mcontext)
+                    .load(url)
+                    .transition(DrawableTransitionOptions.withCrossFade()) //for loading image smoothly and quickly.
+                    .error(R.drawable.ic_launcher_foreground)
+                    .fitCenter()
                     .into(holder.image);
         }
 
