@@ -22,6 +22,8 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
     private Context mcontext;
 
 
+
+
     public SymbolGridRVAdapter(ArrayList<String> recyclerDataArrayList, ArrayList<String> imageUrlArrayList, Context mcontext) {
         this.wordsArrayList = recyclerDataArrayList;
         this.imagesArrayList = imageUrlArrayList;
@@ -57,14 +59,16 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
 
     }
 
+
     public int getItemCount() {
         // this method returns the size of recyclerview
         return wordsArrayList.size();
     }
 
 
+
     // View Holder Class to handle Recycler View.
-    public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+    public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView word;
         private ImageView image;
@@ -73,7 +77,15 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
             super(itemView);
             word = itemView.findViewById(R.id.gridWord);
             image = itemView.findViewById(R.id.gridImage);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            TextView sentenceField = itemView.getRootView().findViewById(R.id.textView3);
+            sentenceField.append(word.getText() + " ");
         }
     }
+
 }
 

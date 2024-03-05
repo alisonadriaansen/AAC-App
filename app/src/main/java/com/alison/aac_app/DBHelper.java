@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String TAG = "DatabaseHelper";
     private final Context myContext;
     private static final String DATABASE_NAME = "aacDB.sqlite3";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private final String pathToSaveDBFile;
 
 
@@ -67,7 +69,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     private void copyDataBase() throws IOException {
-        OutputStream os = new FileOutputStream(pathToSaveDBFile);
+        OutputStream os = Files.newOutputStream(Paths.get(pathToSaveDBFile));
         InputStream is = myContext.getAssets().open("databases/"+DATABASE_NAME);
         byte[] buffer = new byte[1024];
         int length;
@@ -96,9 +98,32 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
-    public List<String> getWords() {
+    public List<String> getWords(int minLength, int maxLength, boolean filterBySentence) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT word FROM words";
+        StringBuilder queryBuilder = new StringBuilder("SELECT DISTINCT word FROM words");
+
+        if (minLength > 0 || maxLength > 0 || filterBySentence) {
+            queryBuilder.append(" WHERE ");
+            boolean addAnd = false;
+
+            if (minLength > 0) {
+                queryBuilder.append("LENGTH(word) >= ").append(minLength);
+                addAnd = true;
+            }
+
+            if (maxLength > 0) {
+                if (addAnd) queryBuilder.append(" AND ");
+                queryBuilder.append("LENGTH(word) <= ").append(maxLength);
+                addAnd = true;
+            }
+
+            if (filterBySentence) {
+                if (addAnd) queryBuilder.append(" AND ");
+                queryBuilder.append("EXISTS (SELECT 1 FROM sentences WHERE INSTR(sentences.sentence, words.word) > 0);");
+            }
+        }
+        String query = queryBuilder.toString();
+        System.out.println(query);
         Cursor cursor = db.rawQuery(query, null);
         List<String> list = new ArrayList<>();
         while(cursor.moveToNext()) {
@@ -108,17 +133,28 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+        System.out.println(list);
         return list;
     }
 
-    public List<String> getImages() {
+    public List<String> getImages(List<String> wordList) {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        String query = "SELECT image FROM words";
-        Cursor cursor = db.rawQuery(query, null);
+        StringBuilder whereClauseBuilder = new StringBuilder();
+        whereClauseBuilder.append(" WHERE ");
+        for (int i = 0; i < wordList.size(); i++) {
+            whereClauseBuilder.append("word = ?");
+            if (i < wordList.size() - 1) {
+                whereClauseBuilder.append(" OR ");
+            }
+        }
+
+        // SQL query with the WHERE clause
+        String query = "SELECT image FROM words" + whereClauseBuilder;
+
+        Cursor cursor = db.rawQuery(query, wordList.toArray(new String[0]));
         List<String> list = new ArrayList<>();
         while(cursor.moveToNext()) {
-            String image;
-            image = cursor.getString(0);
+            String image = cursor.getString(0);
             list.add(image);
         }
         cursor.close();

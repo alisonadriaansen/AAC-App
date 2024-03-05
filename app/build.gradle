@@ -6,6 +6,13 @@ android {
     namespace 'com.alison.aac_app'
     compileSdk 34
 
+    // Importing the API key from local.properties
+    def localProperties = new Properties()
+    def localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(new FileInputStream(localPropertiesFile))
+    }
+
     defaultConfig {
         applicationId "com.alison.aac_app"
         minSdk 28
@@ -14,7 +21,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "myAPI_KEY", "\"API_KEY_VALUE\""
+        buildConfigField "String", "myAPI_KEY", "\"${localProperties.getProperty('API_KEY_VALUE')}\""
+
     }
 
     buildTypes {
@@ -40,4 +48,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation group: 'com.squareup.okio', name: 'okio', version: '3.8.0'
+
 }

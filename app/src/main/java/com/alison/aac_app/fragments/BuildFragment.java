@@ -44,8 +44,8 @@ public class BuildFragment extends Fragment {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
-        List<String> myList = dbHelper.getWords();
-        List<String> urlList = dbHelper.getImages();
+        List<String> myList = dbHelper.getWords(0,0, true);
+        List<String> urlList = dbHelper.getImages(myList);
 
         myAdapter = new SymbolGridRVAdapter((ArrayList<String>) myList, (ArrayList<String>) urlList, getActivity());
         rv.setAdapter(myAdapter);
