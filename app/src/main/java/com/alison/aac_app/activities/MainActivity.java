@@ -1,15 +1,18 @@
 package com.alison.aac_app.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.alison.aac_app.R;
 import com.alison.aac_app.fragments.BuildFragment;
 import com.alison.aac_app.fragments.GenerateFragment;
-import com.alison.aac_app.R;
+
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,19 +30,21 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.fragment_container_view,new BuildFragment());
         fragmentTransaction.commit();
 
-        builderBtn.setOnClickListener(view -> {
-            FragmentManager fragmentManager1 = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction1 = fragmentManager1.beginTransaction();
-            fragmentTransaction1.replace(R.id.fragment_container_view,new BuildFragment());
-            fragmentTransaction1.commit();
-        });
+        builderBtn.setOnClickListener(view -> replaceFragments(BuildFragment.class));
 
-        generatorBtn.setOnClickListener(view -> {
-            FragmentManager fragmentManager12 = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction12 = fragmentManager12.beginTransaction();
-            fragmentTransaction12.replace(R.id.fragment_container_view,new GenerateFragment());
-            fragmentTransaction12.commit();
-        });
+        generatorBtn.setOnClickListener(view -> replaceFragments(GenerateFragment.class));
 
+    }
+
+    public void replaceFragments(Class fragmentClass) {
+        Fragment fragment = null;
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.fragment_container_view, Objects.requireNonNull(fragment))
+                .commit();
     }
 }

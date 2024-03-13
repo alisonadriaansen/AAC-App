@@ -1,10 +1,6 @@
 package com.alison.aac_app.fragments;
 
 import android.os.Bundle;
-import java.util.concurrent.Future;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,24 +8,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import com.alison.aac_app.DBHelper;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alison.aac_app.R;
-import com.alison.aac_app.SymbolGridRVAdapter;
+import com.alison.aac_app.activities.MainActivity;
+import com.alison.aac_app.adapters.SymbolGridRVAdapter;
+import com.alison.aac_app.database.DBHelper;
 import com.alison.aac_app.sentence_logic.AACOpenAIIntegration;
+import com.alison.aac_app.view_models.RVSharedViewModel;
+
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class GenerateFragment extends Fragment {
 
     private final static String TAG = "GenerateFrag";
     SymbolGridRVAdapter myAdapter;
     DBHelper dbHelper = null;
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
     public GenerateFragment() {}
@@ -47,13 +56,13 @@ public class GenerateFragment extends Fragment {
         RecyclerView rv = view.findViewById(R.id.gridRV);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
-        dbHelper = new DBHelper(getActivity(), getActivity().getFilesDir().getAbsolutePath());
+        dbHelper = new DBHelper(getActivity(), requireActivity().getFilesDir().getAbsolutePath());
         try {
             dbHelper.prepareDatabase();
         } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, Objects.requireNonNull(e.getMessage()));
         }
-        List<String> myList = dbHelper.getWords(3, 0, false);
+        List<String> myList = dbHelper.getWordsMinLength(3);
         List<String> urlList = dbHelper.getImages(myList);
 
         myAdapter = new SymbolGridRVAdapter((ArrayList<String>) myList, (ArrayList<String>) urlList, getActivity());
@@ -76,16 +85,20 @@ public class GenerateFragment extends Fragment {
             String response = future.get(); // This will block until the task is completed
             // Handle the generated response here
             Log.d("GeneratedResponse", response);
+            String[] sen_list = response.split("\n");
             // Update UI or take any necessary action with the response
+            RVSharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(RVSharedViewModel.class);
+            viewModel.setData(Arrays.asList(sen_list));
+            ((MainActivity) requireActivity()).replaceFragments(RVSentencesFragment.class);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("GenerateResponseError", "Error occurred: " + e.getMessage());
         }
     }
 
-    private class GenerateResponseCallable implements Callable<String> {
+    private static class GenerateResponseCallable implements Callable<String> {
 
-        private String words;
+        private final String words;
 
         GenerateResponseCallable(String words) {
             this.words = words;

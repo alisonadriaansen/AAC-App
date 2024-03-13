@@ -1,4 +1,4 @@
-package com.alison.aac_app;
+package com.alison.aac_app.database;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final static String TAG = "DatabaseHelper";
@@ -24,13 +24,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 7;
     private final String pathToSaveDBFile;
 
-
     public DBHelper(Context context, String filePath) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.myContext = context;
         pathToSaveDBFile = filePath + "/" + DATABASE_NAME;
     }
-
 
     public void prepareDatabase() throws IOException {
         boolean dbExist = checkDataBase();
@@ -43,18 +41,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 try {
                     copyDataBase();
                 } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, Objects.requireNonNull(e.getMessage()));
                 }
             }
         } else {
             try {
                 copyDataBase();
             } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, Objects.requireNonNull(e.getMessage()));
             }
         }
     }
-
 
     private boolean checkDataBase() {
         boolean checkDB = false;
@@ -62,11 +59,10 @@ public class DBHelper extends SQLiteOpenHelper {
             File file = new File(pathToSaveDBFile);
             checkDB = file.exists();
         } catch(SQLiteException e) {
-            Log.d(TAG, e.getMessage());
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
         }
         return checkDB;
     }
-
 
     private void copyDataBase() throws IOException {
         OutputStream os = Files.newOutputStream(Paths.get(pathToSaveDBFile));
@@ -81,7 +77,6 @@ public class DBHelper extends SQLiteOpenHelper {
         os.close();
     }
 
-
     public void deleteDb() {
         File file = new File(pathToSaveDBFile);
         if(file.exists()) {
@@ -90,40 +85,34 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "onCreate");
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     }
-    public List<String> getWords(int minLength, int maxLength, boolean filterBySentence) {
+
+        public List<String> getWordsSentences() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
-        StringBuilder queryBuilder = new StringBuilder("SELECT DISTINCT word FROM words");
-
-        if (minLength > 0 || maxLength > 0 || filterBySentence) {
-            queryBuilder.append(" WHERE ");
-            boolean addAnd = false;
-
-            if (minLength > 0) {
-                queryBuilder.append("LENGTH(word) >= ").append(minLength);
-                addAnd = true;
-            }
-
-            if (maxLength > 0) {
-                if (addAnd) queryBuilder.append(" AND ");
-                queryBuilder.append("LENGTH(word) <= ").append(maxLength);
-                addAnd = true;
-            }
-
-            if (filterBySentence) {
-                if (addAnd) queryBuilder.append(" AND ");
-                queryBuilder.append("EXISTS (SELECT 1 FROM sentences WHERE INSTR(sentences.sentence, words.word) > 0);");
-            }
+        String query = "SELECT DISTINCT word FROM words WHERE EXISTS (SELECT 1 FROM sentences WHERE INSTR(sentences.sentence, words.word) > 0);";
+        Cursor cursor = db.rawQuery(query, null);
+        List<String> list = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            String word;
+            word = cursor.getString(0);
+            list.add(word);
         }
-        String query = queryBuilder.toString();
-        System.out.println(query);
+        cursor.close();
+        db.close();
+        System.out.println(list);
+        return list;
+    }
+
+    public List<String> getWordsMinLength(int minLength) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+        String query = "SELECT DISTINCT word FROM words WHERE LENGTH(word) >= " + minLength;
         Cursor cursor = db.rawQuery(query, null);
         List<String> list = new ArrayList<>();
         while(cursor.moveToNext()) {
@@ -148,7 +137,6 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        // SQL query with the WHERE clause
         String query = "SELECT image FROM words" + whereClauseBuilder;
 
         Cursor cursor = db.rawQuery(query, wordList.toArray(new String[0]));
@@ -162,6 +150,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public List<String> getSentences() {
+
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
+        String query = "SELECT * FROM sentences";
+        Cursor cursor = db.rawQuery(query, null);
+        List<String> list = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            String word;
+            word = cursor.getString(0);
+            list.add(word);
+        }
+        cursor.close();
+        db.close();
+        return list;
+
+    }
 
     private int getVersionId() {
         SQLiteDatabase db = SQLiteDatabase.openDatabase(pathToSaveDBFile, null, SQLiteDatabase.OPEN_READONLY);
