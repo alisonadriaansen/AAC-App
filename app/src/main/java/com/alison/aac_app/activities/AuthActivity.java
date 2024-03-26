@@ -1,9 +1,7 @@
 package com.alison.aac_app.activities;
 
-import android.content.Context;
+
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -13,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alison.aac_app.R;
 
 import com.alison.aac_app.fragments.LoginFragment;
-
 import java.util.Objects;
 
 public class AuthActivity extends AppCompatActivity {
@@ -38,7 +35,8 @@ public class AuthActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fragment_container_view, Objects.requireNonNull(fragment))
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainerView1, Objects.requireNonNull(fragment))
                 .commit();
     }
+
 }

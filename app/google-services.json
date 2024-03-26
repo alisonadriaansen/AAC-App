@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "814599282599",
+    "project_id": "my-aac-12771",
+    "storage_bucket": "my-aac-12771.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814599282599:android:ef867777a019ea88a02082",
+        "android_client_info": {
+          "package_name": "com.alison.aac_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814599282599-na5lmsk8qmukj4heg71e7vkpd5frjqc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alison.aac_app",
+            "certificate_hash": "4d3641dee3775f76162f2c82f0b686778978cec9"
+          }
+        },
+        {
+          "client_id": "814599282599-09ap86fmr6qqkb49umm2rs57lv5kijse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4yRGfHL8ZOs2Wd3ZG9qGf_A3DUhebpQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814599282599-09ap86fmr6qqkb49umm2rs57lv5kijse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

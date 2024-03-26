@@ -25,28 +25,29 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="61dp"
+                android:layout_height="50dp"
                 android:src="@drawable/my"
-                app:srcCompat="@drawable/my" />
+                app:srcCompat="@drawable/my"
+                android:contentDescription="@string/logo" />
 
             <EditText
                 android:id="@+id/regEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:ems="10"
-                android:hint="Username"
+                android:hint="@string/email_address"
                 android:inputType="textEmailAddress"
                 android:padding="15dp"
                 android:textColor="@color/GhostWhite"
-                android:textColorHint="@color/GhostWhite"
-                android:autofillHints="" />
+                android:textColorHint="@color/GhostWhite" />
 
             <EditText
                 android:id="@+id/regPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="15dp"
                 android:textColor="@color/GhostWhite"
@@ -58,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 android:inputType="textPassword"
                 android:padding="15dp"
                 android:textColor="@color/GhostWhite"
@@ -70,14 +71,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:backgroundTint="@color/GhostWhite"
-                android:text="Register"
+                android:text="@string/register"
                 android:textColor="@color/DarkGreen" />
 
             <Button
                 android:id="@+id/haveAcc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Have An Account? Click to Login" />
+                android:text="@string/have_an_account_click_to_login" />
 
         </LinearLayout>
 

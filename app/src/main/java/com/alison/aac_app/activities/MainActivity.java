@@ -1,5 +1,6 @@
 package com.alison.aac_app.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -11,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.alison.aac_app.R;
 import com.alison.aac_app.fragments.BuildFragment;
 import com.alison.aac_app.fragments.GenerateFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button builderBtn = findViewById(R.id.builderBtn);
         Button generatorBtn = findViewById(R.id.generatorBtn);
-
+        Button logOut = findViewById(R.id.logOutBtn);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -33,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         builderBtn.setOnClickListener(view -> replaceFragments(BuildFragment.class));
 
         generatorBtn.setOnClickListener(view -> replaceFragments(GenerateFragment.class));
+
+        logOut.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity.this, AuthActivity.class));
+
+        });
 
     }
 
