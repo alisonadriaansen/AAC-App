@@ -7,6 +7,19 @@
     android:background="@color/DarkGreen"
     tools:context=".activities.SavedSentenceActivity">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="165dp"
+        android:layout_height="57dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_container_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.001"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/my" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/savedRV"
         android:layout_width="610dp"

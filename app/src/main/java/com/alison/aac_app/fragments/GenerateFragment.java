@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +39,7 @@ public class GenerateFragment extends Fragment {
 
     private final static String TAG = "GenerateFrag";
     SymbolGridRVAdapter myAdapter;
+    List<String> myList;
     DBHelper dbHelper = null;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -54,7 +57,10 @@ public class GenerateFragment extends Fragment {
         Button generate = view.findViewById(R.id.gnrt);
         EditText tv = view.findViewById(R.id.textView3);
         RecyclerView rv = view.findViewById(R.id.gridRV);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        SearchView sv = view.findViewById(R.id.searchView);
+        rv.setLayoutManager(new GridLayoutManager(getContext(), 4));
+
+        sv.clearFocus();
 
         dbHelper = new DBHelper(getActivity(), requireActivity().getFilesDir().getAbsolutePath());
         try {
@@ -62,13 +68,25 @@ public class GenerateFragment extends Fragment {
         } catch (IOException e) {
             Log.e(TAG, Objects.requireNonNull(e.getMessage()));
         }
-        List<String> myList = dbHelper.getWordsMinLength(3);
+        myList = dbHelper.getWordsMinLength(3);
         List<String> urlList = dbHelper.getImages(myList);
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filterList(s, myList);
+                return true;
+            }
+        });
 
         myAdapter = new SymbolGridRVAdapter((ArrayList<String>) myList, (ArrayList<String>) urlList, getActivity());
         rv.setAdapter(myAdapter);
         tv.setMovementMethod(new ScrollingMovementMethod());
-
 
         clear.setOnClickListener(view1 -> tv.getText().clear());
         generate.setOnClickListener(view1 -> {
@@ -85,7 +103,7 @@ public class GenerateFragment extends Fragment {
             String response = future.get(); // This will block until the task is completed
             // Handle the generated response here
             Log.d("GeneratedResponse", response);
-            String[] sen_list = response.split("\n");
+            String[] sen_list = response.toLowerCase().split("\n");
             // Update UI or take any necessary action with the response
             RVSharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(RVSharedViewModel.class);
             viewModel.setData(Arrays.asList(sen_list));
@@ -123,4 +141,19 @@ public class GenerateFragment extends Fragment {
         executor.shutdown();
     }
 
+    private void filterList(String s, List<String> myList) {
+        ArrayList<String> filteredList = new ArrayList<>();
+        for (String word : myList){
+            if (word.toLowerCase().contains(s.toLowerCase())){
+                filteredList.add(word);
+            }
+        }
+
+        if (filteredList.isEmpty()){
+            Toast.makeText(this.getContext(), "No words found", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            myAdapter.setFilteredList(filteredList);
+        }
+    }
 }

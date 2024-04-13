@@ -11,12 +11,10 @@
         android:id="@+id/fragment_container_view"
         android:name="com.alison.aac_app.fragments.BuildFragment"
         android:layout_width="730dp"
-        android:layout_height="wrap_content"
+        android:layout_height="270dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.958" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/builderBtn"
@@ -50,14 +48,14 @@
         android:id="@+id/imageView2"
         android:layout_width="165dp"
         android:layout_height="57dp"
+        android:contentDescription="@string/logo"
         app:layout_constraintBottom_toTopOf="@+id/fragment_container_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.001"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/my"
-        android:contentDescription="@string/logo" />
+        app:srcCompat="@drawable/my" />
 
     <Button
         android:id="@+id/savedSentences"

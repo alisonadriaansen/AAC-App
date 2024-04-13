@@ -15,10 +15,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapter.RecyclerViewHolder> {
 
-    private final ArrayList<String> wordsArrayList;
+    private ArrayList<String> wordsArrayList;
     private final ArrayList<String> imagesArrayList;
     private final Context mcontext;
 
@@ -26,6 +27,12 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
         this.wordsArrayList = recyclerDataArrayList;
         this.imagesArrayList = imageUrlArrayList;
         this.mcontext = mcontext;
+    }
+
+    public void setFilteredList(ArrayList<String> filteredList){
+        this.wordsArrayList = filteredList;
+
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -49,6 +56,11 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
                     .error(R.drawable.ic_launcher_foreground)
                     .fitCenter()
                     .into(holder.image);
+        } else if (url.equals("No hits")) {
+            assert holder.image != null;
+            Glide
+                    .with(mcontext)
+                    .clear(holder.image);
         }
 
     }

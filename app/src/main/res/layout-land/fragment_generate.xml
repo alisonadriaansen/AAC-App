@@ -11,24 +11,24 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gridRV"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/gridRV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.942">
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/clr"
@@ -42,16 +42,18 @@
             android:id="@+id/textView3"
             android:layout_width="436dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="4dp"
             android:background="#FFFFFF"
             android:backgroundTint="#FFFFFF"
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
+            android:gravity="center"
             android:paddingHorizontal="5dp"
             android:scrollbars="horizontal"
             android:singleLine="true"
-            android:textSize="20sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/gnrt"
@@ -61,5 +63,17 @@
             android:text="Generate"
             android:textColor="@color/Black" />
     </LinearLayout>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:background="@android:color/white"
+        android:queryHint="Search..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
