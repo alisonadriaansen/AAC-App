@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">AAC App</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save">Save</string>
+    <string name="speak">Speak</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="no_account_click_to_sign_up">No account? Click to Sign Up</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="have_an_account_click_to_login">Have An Account? Click to Login</string>
+    <string name="build">Build</string>
+    <string name="generate">Generate</string>
+    <string name="log_out">Log Out</string>
+    <string name="logo">Logo</string>
+    <string name="my_sentences">My Sentences</string>
+    <string name="saved_sentences">Saved Sentences</string>
 </resources>

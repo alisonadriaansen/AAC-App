@@ -48,8 +48,8 @@ public class RegisterFragment extends Fragment {
             String userPassConfirm = String.valueOf(passwordConfirm.getText());
 
             if (!userEmail.equals("") && !userPass.equals("") && !userPassConfirm.equals("")){
-                if ((userPass.length() < 8) || !passwordComplexity(userPass)){
-                    Toast.makeText(getActivity(), "Password length must be at least 8 & contain letters, numbers and symbols.", Toast.LENGTH_LONG).show();
+                if ((userPass.length() < 8) || passwordComplexity(userPass)){
+                    Toast.makeText(getActivity(), "Password length must be at least 8 characters & contain letters, numbers and symbols.", Toast.LENGTH_LONG).show();
                 }
                 else {
                     if (!userPass.equals(userPassConfirm)){

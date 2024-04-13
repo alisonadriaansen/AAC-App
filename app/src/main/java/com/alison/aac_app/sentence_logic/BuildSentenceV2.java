@@ -10,7 +10,7 @@ public class BuildSentenceV2 {
         ArrayList<String> sentencesRes = new ArrayList<>();
         List<String> filteredSentences = filterSentences(sentences,userList);
         if (filteredSentences.isEmpty()) {
-            sentencesRes.add("No matching sentences found.");
+            sentencesRes.add("No sentences found.");
         } else {
             sentencesRes.addAll(filteredSentences);
         }

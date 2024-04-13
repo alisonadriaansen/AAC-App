@@ -31,7 +31,7 @@ public class AACOpenAIIntegration {
     public static String generateResponse(String words) throws IOException, JSONException {
         String[] words_split = words.split(" ");
         StringBuilder promptBuilder = new StringBuilder();
-        promptBuilder.append("As a child using an AAC app, based on these words, you might want to say (list 3 sentences)");
+        promptBuilder.append("As a child using an AAC app, based on these words, you might want to say... (list 3 sentences, no list specific formatting, numbering, quotes, etc.):");
         for (String word : words_split) {
             promptBuilder.append(word).append(" ");
         }

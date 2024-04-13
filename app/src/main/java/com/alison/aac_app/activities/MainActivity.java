@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         Button builderBtn = findViewById(R.id.builderBtn);
         Button generatorBtn = findViewById(R.id.generatorBtn);
         Button logOut = findViewById(R.id.logOutBtn);
+        Button sentences = findViewById(R.id.savedSentences);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -39,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
         logOut.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(MainActivity.this, AuthActivity.class));
-
         });
+
+        sentences.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, SavedSentenceActivity.class)));
 
     }
 
