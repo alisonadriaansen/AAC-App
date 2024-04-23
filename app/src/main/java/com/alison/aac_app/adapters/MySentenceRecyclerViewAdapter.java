@@ -1,22 +1,24 @@
 package com.alison.aac_app.adapters;
 
+
 import android.speech.tts.TextToSpeech;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alison.aac_app.R;
-import com.alison.aac_app.activities.SavedSentenceActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,10 +28,12 @@ import java.util.Objects;
 public class MySentenceRecyclerViewAdapter extends RecyclerView.Adapter<MySentenceRecyclerViewAdapter.ViewHolder> {
 
     private final List<String> mValues;
+    private static TextToSpeech tts;
 
 
-    public MySentenceRecyclerViewAdapter(List<String> items) {
+    public MySentenceRecyclerViewAdapter(List<String> items, TextToSpeech tts) {
         mValues = items;
+        MySentenceRecyclerViewAdapter.tts = tts;
     }
 
     @NonNull
@@ -42,11 +46,18 @@ public class MySentenceRecyclerViewAdapter extends RecyclerView.Adapter<MySenten
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
+
         holder.mContentView.setText(mValues.get(position));
         if (Objects.equals(mValues.get(0), "No matching sentences found.")){
             holder.save.setVisibility(View.GONE);
             holder.speak.setVisibility(View.GONE);
         }
+
+        holder.speak.setOnClickListener(v -> {
+            if (tts != null && !TextUtils.isEmpty(mValues.get(position))) {
+                tts.speak(mValues.get(position), TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+        });
     }
 
     @Override
@@ -56,10 +67,11 @@ public class MySentenceRecyclerViewAdapter extends RecyclerView.Adapter<MySenten
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mContentView;
-        public TextToSpeech ttobj;
         public String mItem;
         public Button save;
         public Button speak;
+
+
         private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -76,11 +88,6 @@ public class MySentenceRecyclerViewAdapter extends RecyclerView.Adapter<MySenten
                 db.collection("user-data").document(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).set(map, SetOptions.merge());
             });
 
-            speak.setOnClickListener(view -> {
-                CharSequence toSpeak = mContentView.getText().toString();
-                Toast.makeText(itemView.getContext(), toSpeak,Toast.LENGTH_SHORT).show();
-                ttobj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-            });
         }
 
         @NonNull

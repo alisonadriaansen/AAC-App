@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class BuildFragment extends Fragment {
+public class BuildFragment extends Fragment{
 
     private final static String TAG = "BuildFrag";
     SymbolGridRVAdapter myAdapter;
@@ -103,7 +103,7 @@ public class BuildFragment extends Fragment {
         return view;
     }
 
-    private void filterList(String s, List<String> myList) {
+    private void filterList(String s, @NonNull List<String> myList) {
         ArrayList<String> filteredList = new ArrayList<>();
         for (String word : myList) {
             if (word.toLowerCase().contains(s.toLowerCase())) {
@@ -117,4 +117,5 @@ public class BuildFragment extends Fragment {
             myAdapter.setFilteredList(filteredList);
         }
     }
+
 }

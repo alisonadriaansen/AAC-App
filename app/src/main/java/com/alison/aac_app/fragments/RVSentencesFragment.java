@@ -2,6 +2,8 @@ package com.alison.aac_app.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +19,22 @@ import com.alison.aac_app.adapters.MySentenceRecyclerViewAdapter;
 import com.alison.aac_app.view_models.RVSharedViewModel;
 
 import java.util.List;
+import java.util.Locale;
 
-public class RVSentencesFragment extends Fragment {
+public class RVSentencesFragment extends Fragment implements TextToSpeech.OnInitListener{
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+    private TextToSpeech tts;
+
 
     public RVSentencesFragment() {
-    }
-
-    public static RVSentencesFragment newInstance(int columnCount) {
-        RVSentencesFragment fragment = new RVSentencesFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        requireActivity().runOnUiThread(() -> tts = new TextToSpeech(getActivity(), this, "com.google.android.tts"));
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -48,6 +45,11 @@ public class RVSentencesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_rv_sentences_list, container, false);
+
+        List<TextToSpeech.EngineInfo> engines = tts.getEngines();
+        for (TextToSpeech.EngineInfo engine : engines) {
+            Log.d("TTS", "Engine: " + engine.name);
+        }
 
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -60,9 +62,31 @@ public class RVSentencesFragment extends Fragment {
 
             RVSharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(RVSharedViewModel.class);
             List<String> newData = viewModel.getData();
-            recyclerView.setAdapter(new MySentenceRecyclerViewAdapter(newData));
+            recyclerView.setAdapter(new MySentenceRecyclerViewAdapter(newData, tts));
 
         }
         return view;
+    }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            int result = tts.setLanguage(Locale.ENGLISH);
+
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Language is not supported");
+            }
+        } else {
+            Log.e("TTS", "Initialization failed");
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
     }
 }

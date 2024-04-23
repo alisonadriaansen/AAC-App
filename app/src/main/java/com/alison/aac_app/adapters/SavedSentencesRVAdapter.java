@@ -1,5 +1,6 @@
 package com.alison.aac_app.adapters;
 
+import android.content.Intent;
 import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class SavedSentencesRVAdapter extends RecyclerView.Adapter<SavedSentences
         if (Objects.equals(mValues.get(0), "No sentences found.")){
             holder.speak.setVisibility(View.GONE);
         }
+
     }
 
     @Override
@@ -50,7 +52,7 @@ public class SavedSentencesRVAdapter extends RecyclerView.Adapter<SavedSentences
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView mContentView;
-        public TextToSpeech ttobj;
+        public TextToSpeech textToSpeech;
         public String mItem;
         public Button save;
         public Button speak;
@@ -61,16 +63,58 @@ public class SavedSentencesRVAdapter extends RecyclerView.Adapter<SavedSentences
             save = itemView.findViewById(R.id.saveBtn);
             speak = itemView.findViewById(R.id.speakBtn);
 
-            ttobj = new TextToSpeech(itemView.getContext(), status -> {
-                if(status != TextToSpeech.ERROR) {
-                    ttobj.setLanguage(Locale.UK);
+//            ttobj = new TextToSpeech(itemView.getContext(), new TextToSpeech.OnInitListener() {
+//                @Override
+//                public void onInit(int status) {
+//                    if (status == TextToSpeech.SUCCESS) {
+//                        int result = ttobj.setLanguage(Locale.ENGLISH);
+//                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+//                            Toast.makeText(itemView.getContext(), "Language not supported", Toast.LENGTH_SHORT).show();
+//                            System.out.println("Language not supported");
+//                        }
+//                    } else {
+//                        Toast.makeText(itemView.getContext(), "TTS initialization failed", Toast.LENGTH_SHORT).show();
+//                        System.out.println("TTS initialization failed");
+//                    }
+//                }
+//            });
+
+//            speak.setOnClickListener(view -> {
+//                if (textToSpeech != null && textToSpeech.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_AVAILABLE) {
+//                    CharSequence toSpeak = mContentView.getText().toString();
+//                    Toast.makeText(itemView.getContext(), toSpeak, Toast.LENGTH_SHORT).show();
+//                    textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+//                } else {
+//                    Toast.makeText(itemView.getContext(), "TTS engine not initialized or language not available", Toast.LENGTH_SHORT).show();
+//                    System.out.println("TTS engine not initialized or language not available");
+//                }
+//            });
+            textToSpeech = new TextToSpeech(itemView.getContext(), status -> {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = textToSpeech.setLanguage(Locale.US);
+                    if (result == TextToSpeech.LANG_MISSING_DATA) {
+                        Intent installIntent = new Intent();
+                        installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                        itemView.getContext().startActivity(installIntent);
+                    } else if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Toast.makeText(itemView.getContext(), "Language not supported", Toast.LENGTH_SHORT).show();
+                        System.out.println("Language not supported");
+                    }
+                } else {
+                    Toast.makeText(itemView.getContext(), "TTS initialization failed: " + status, Toast.LENGTH_SHORT).show();
+                    System.out.println("TTS initialization failed: " + status);
                 }
             });
 
             speak.setOnClickListener(view -> {
-                CharSequence toSpeak = mContentView.getText().toString();
-                Toast.makeText(itemView.getContext(), toSpeak,Toast.LENGTH_SHORT).show();
-                ttobj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                if (textToSpeech != null && textToSpeech.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_AVAILABLE) {
+                    CharSequence toSpeak = mContentView.getText().toString();
+                    Toast.makeText(itemView.getContext(), toSpeak, Toast.LENGTH_SHORT).show();
+                    textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+                } else {
+                    Toast.makeText(itemView.getContext(), "TTS engine not initialized or language not available", Toast.LENGTH_SHORT).show();
+                    System.out.println("TTS engine not initialized or language not available");
+                }
             });
         }
     }
