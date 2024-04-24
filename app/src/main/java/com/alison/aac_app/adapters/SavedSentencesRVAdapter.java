@@ -63,32 +63,6 @@ public class SavedSentencesRVAdapter extends RecyclerView.Adapter<SavedSentences
             save = itemView.findViewById(R.id.saveBtn);
             speak = itemView.findViewById(R.id.speakBtn);
 
-//            ttobj = new TextToSpeech(itemView.getContext(), new TextToSpeech.OnInitListener() {
-//                @Override
-//                public void onInit(int status) {
-//                    if (status == TextToSpeech.SUCCESS) {
-//                        int result = ttobj.setLanguage(Locale.ENGLISH);
-//                        if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-//                            Toast.makeText(itemView.getContext(), "Language not supported", Toast.LENGTH_SHORT).show();
-//                            System.out.println("Language not supported");
-//                        }
-//                    } else {
-//                        Toast.makeText(itemView.getContext(), "TTS initialization failed", Toast.LENGTH_SHORT).show();
-//                        System.out.println("TTS initialization failed");
-//                    }
-//                }
-//            });
-
-//            speak.setOnClickListener(view -> {
-//                if (textToSpeech != null && textToSpeech.isLanguageAvailable(Locale.ENGLISH) == TextToSpeech.LANG_AVAILABLE) {
-//                    CharSequence toSpeak = mContentView.getText().toString();
-//                    Toast.makeText(itemView.getContext(), toSpeak, Toast.LENGTH_SHORT).show();
-//                    textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
-//                } else {
-//                    Toast.makeText(itemView.getContext(), "TTS engine not initialized or language not available", Toast.LENGTH_SHORT).show();
-//                    System.out.println("TTS engine not initialized or language not available");
-//                }
-//            });
             textToSpeech = new TextToSpeech(itemView.getContext(), status -> {
                 if (status == TextToSpeech.SUCCESS) {
                     int result = textToSpeech.setLanguage(Locale.US);

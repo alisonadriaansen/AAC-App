@@ -15,25 +15,48 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapter.RecyclerViewHolder> {
 
     private ArrayList<String> wordsArrayList;
-    private final ArrayList<String> imagesArrayList;
+    private ArrayList<String> imagesArrayList;
     private final Context mcontext;
+    private final ArrayList<String> originalWordsArrayList;
+    private final ArrayList<String> originalImagesArrayList;
+
 
     public SymbolGridRVAdapter(ArrayList<String> recyclerDataArrayList, ArrayList<String> imageUrlArrayList, Context mcontext) {
         this.wordsArrayList = recyclerDataArrayList;
         this.imagesArrayList = imageUrlArrayList;
+        this.originalWordsArrayList = new ArrayList<>(recyclerDataArrayList);
+        this.originalImagesArrayList = new ArrayList<>(imageUrlArrayList);
         this.mcontext = mcontext;
     }
 
     public void setFilteredList(ArrayList<String> filteredList){
-        this.wordsArrayList = filteredList;
+        ArrayList<String> filteredImagesList = new ArrayList<>();
+
+        if (filteredList.isEmpty()) {
+            // If the filtered list is empty, reset both lists to their original state
+            this.wordsArrayList = originalWordsArrayList;
+            this.imagesArrayList = originalImagesArrayList;
+        } else {
+            for (String word : filteredList) {
+                int index = originalWordsArrayList.indexOf(word);
+                if (index != -1 && index < originalImagesArrayList.size()) {
+                    filteredImagesList.add(originalImagesArrayList.get(index));
+                } else {
+                    filteredImagesList.add("No hits"); // or some default image URL
+                }
+            }
+
+            this.wordsArrayList = filteredList;
+            this.imagesArrayList = filteredImagesList;
+        }
 
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -86,6 +109,27 @@ public class SymbolGridRVAdapter extends RecyclerView.Adapter<SymbolGridRVAdapte
             TextView sentenceField = itemView.getRootView().findViewById(R.id.textView3);
             sentenceField.append(word.getText() + " ");
         }
+    }
+
+    public void filterList(String query) {
+        ArrayList<String> filteredWords = new ArrayList<>();
+        ArrayList<String> filteredImages = new ArrayList<>();
+
+        if (query.isEmpty()) {
+            filteredWords.addAll(originalWordsArrayList);
+            filteredImages.addAll(originalImagesArrayList);
+        } else {
+            for (int i = 0; i < originalWordsArrayList.size(); i++) {
+                if (originalWordsArrayList.get(i).toLowerCase().contains(query.toLowerCase())) {
+                    filteredWords.add(originalWordsArrayList.get(i));
+                    filteredImages.add(originalImagesArrayList.get(i));
+                }
+            }
+        }
+
+        wordsArrayList = filteredWords;
+        imagesArrayList = filteredImages;
+        notifyDataSetChanged();
     }
 
 }

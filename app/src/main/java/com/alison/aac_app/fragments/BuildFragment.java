@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -76,7 +74,7 @@ public class BuildFragment extends Fragment{
 
             @Override
             public boolean onQueryTextChange(String s) {
-                filterList(s, myList);
+                myAdapter.filterList(s);
                 return true;
             }
         });
@@ -101,21 +99,6 @@ public class BuildFragment extends Fragment{
         });
 
         return view;
-    }
-
-    private void filterList(String s, @NonNull List<String> myList) {
-        ArrayList<String> filteredList = new ArrayList<>();
-        for (String word : myList) {
-            if (word.toLowerCase().contains(s.toLowerCase())) {
-                filteredList.add(word);
-            }
-        }
-
-        if (filteredList.isEmpty()) {
-            Toast.makeText(this.getContext(), "No words found", Toast.LENGTH_SHORT).show();
-        } else {
-            myAdapter.setFilteredList(filteredList);
-        }
     }
 
 }
