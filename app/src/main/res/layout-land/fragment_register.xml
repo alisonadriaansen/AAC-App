@@ -14,6 +14,7 @@
         <LinearLayout
             android:layout_width="412dp"
             android:layout_height="0dp"
+            android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,9 +27,9 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:contentDescription="@string/logo"
                 android:src="@drawable/my"
-                app:srcCompat="@drawable/my"
-                android:contentDescription="@string/logo" />
+                app:srcCompat="@drawable/my" />
 
             <EditText
                 android:id="@+id/regEmail"
@@ -46,25 +47,25 @@
                 android:id="@+id/regPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="15dp"
                 android:textColor="@color/GhostWhite"
-                android:textColorHint="@color/GhostWhite"
-                android:autofillHints="" />
+                android:textColorHint="@color/GhostWhite" />
 
             <EditText
                 android:id="@+id/regPassConfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword"
                 android:padding="15dp"
                 android:textColor="@color/GhostWhite"
-                android:textColorHint="@color/GhostWhite"
-                android:autofillHints="" />
+                android:textColorHint="@color/GhostWhite" />
 
             <Button
                 android:id="@+id/regBtn"

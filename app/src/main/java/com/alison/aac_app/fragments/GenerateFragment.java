@@ -100,11 +100,11 @@ public class GenerateFragment extends Fragment {
     private void generateResponseAsync(String words) {
         Future<String> future = executor.submit(new GenerateResponseCallable(words));
         try {
-            String response = future.get(); // This will block until the task is completed
-            // Handle the generated response here
+            String response = future.get();
             Log.d("GeneratedResponse", response);
+            response = response.replaceAll("[^a-zA-Z0-9\\s]", "");
+            response = response.replaceAll("(?m)^\\d+\\s*", "");
             String[] sen_list = response.toLowerCase().split("\n");
-            // Update UI or take any necessary action with the response
             RVSharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(RVSharedViewModel.class);
             viewModel.setData(Arrays.asList(sen_list));
             ((MainActivity) requireActivity()).replaceFragments(RVSentencesFragment.class);

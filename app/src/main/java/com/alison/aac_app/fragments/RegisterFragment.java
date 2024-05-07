@@ -54,8 +54,6 @@ public class RegisterFragment extends Fragment {
                 else {
                     if (!userPass.equals(userPassConfirm)){
                         Toast.makeText(getActivity(), "Passwords must match.", Toast.LENGTH_SHORT).show();
-                        System.out.println(userPass);
-                        System.out.println(userPassConfirm);
                     }
                     else {
                         registerUser(userEmail, userPass);
@@ -67,7 +65,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        haveAcc.setOnClickListener(view1 -> ((AuthActivity) requireActivity()).replaceFragments(RegisterFragment.class));
+        haveAcc.setOnClickListener(view1 -> ((AuthActivity) requireActivity()).replaceFragments(LoginFragment.class));
 
         return view;
     }
@@ -79,7 +77,6 @@ public class RegisterFragment extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             currentUser.reload();
-            System.out.println(currentUser);
             startActivity(new Intent(this.requireActivity(), MainActivity.class));
         }
     }

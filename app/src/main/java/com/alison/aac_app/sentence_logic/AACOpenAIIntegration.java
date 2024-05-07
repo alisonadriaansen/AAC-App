@@ -31,7 +31,8 @@ public class AACOpenAIIntegration {
     public static String generateResponse(String words) throws IOException, JSONException {
         String[] words_split = words.split(" ");
         StringBuilder promptBuilder = new StringBuilder();
-        promptBuilder.append("As a child using an AAC app, based on these words, you might want to say... (list 3 sentences, no list specific formatting, numbering, quotes, etc.):");
+        promptBuilder.append("As a child using an AAC app, based on these words," +
+                " you might want to say... (list 10 sentences:");
         for (String word : words_split) {
             promptBuilder.append(word).append(" ");
         }
@@ -48,8 +49,6 @@ public class AACOpenAIIntegration {
                 .put("temperature", 0.7);
 
         OkHttpClient client = new OkHttpClient();
-
-        System.out.println(OPENAI_API_KEY);
 
         Request request = new Request.Builder()
                 .url(OPENAI_ENDPOINT)
@@ -71,7 +70,6 @@ public class AACOpenAIIntegration {
             if (choices.length() > 0) {
                 JSONObject firstChoice = choices.getJSONObject(0);
                 JSONObject gptResponse = (JSONObject) firstChoice.get("message");
-                System.out.println(gptResponse.get("content"));
                 return gptResponse.get("content").toString();
             }
         } else {

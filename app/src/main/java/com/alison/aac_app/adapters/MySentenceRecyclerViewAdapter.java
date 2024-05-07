@@ -22,6 +22,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,13 +49,14 @@ public class MySentenceRecyclerViewAdapter extends RecyclerView.Adapter<MySenten
         holder.mItem = mValues.get(position);
 
         holder.mContentView.setText(mValues.get(position));
-        if (Objects.equals(mValues.get(0), "No matching sentences found.")){
+        if (Objects.equals(mValues.get(0), "No sentences found.")){
             holder.save.setVisibility(View.GONE);
             holder.speak.setVisibility(View.GONE);
         }
 
         holder.speak.setOnClickListener(v -> {
             if (tts != null && !TextUtils.isEmpty(mValues.get(position))) {
+                tts.setLanguage(Locale.UK);
                 tts.speak(mValues.get(position), TextToSpeech.QUEUE_FLUSH, null, null);
             }
         });

@@ -92,7 +92,6 @@ public class BuildFragment extends Fragment{
             List<String> userList = Arrays.asList(userInput.split(" "));
             buildSentenceV2 = new BuildSentenceV2();
             ArrayList<String> sentencesMatch = buildSentenceV2.narrowDownSentences(sen_list, userList);
-            System.out.println(sentencesMatch);
             RVSharedViewModel viewModel = new ViewModelProvider(requireActivity()).get(RVSharedViewModel.class);
             viewModel.setData((sentencesMatch));
             ((MainActivity) requireActivity()).replaceFragments(RVSentencesFragment.class);

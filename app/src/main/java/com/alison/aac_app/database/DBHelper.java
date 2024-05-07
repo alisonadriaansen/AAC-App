@@ -53,7 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    private boolean checkDataBase() {
+    public boolean checkDataBase() {
         boolean checkDB = false;
         try {
             File file = new File(pathToSaveDBFile);
@@ -106,7 +106,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        System.out.println(list);
         return list;
     }
 
@@ -122,7 +121,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-        System.out.println(list);
         return list;
     }
 

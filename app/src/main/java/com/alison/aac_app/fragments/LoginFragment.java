@@ -59,12 +59,9 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        //mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             currentUser.reload();
-            System.out.println(currentUser);
             startActivity(new Intent(this.requireActivity(), MainActivity.class));
         }
     }
@@ -73,20 +70,15 @@ public class LoginFragment extends Fragment {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
                         Toast.makeText(getActivity(), "Login Successful.",
                                 Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this.requireActivity(), MainActivity.class));
 
-                        //FirebaseUser user = mAuth.getCurrentUser();
-                        //updateUI(user);
                     } else {
-                        // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
                         Toast.makeText(getActivity(), "Login Failed.",
                                 Toast.LENGTH_SHORT).show();
-                        //updateUI(null);
                     }
                 });
     }

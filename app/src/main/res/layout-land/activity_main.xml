@@ -10,11 +10,14 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"
         android:name="com.alison.aac_app.fragments.BuildFragment"
-        android:layout_width="730dp"
-        android:layout_height="270dp"
+        android:layout_width="727dp"
+        android:layout_height="304dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generatorBtn"
+        app:layout_constraintVertical_bias="0.965" />
 
     <Button
         android:id="@+id/builderBtn"
@@ -73,7 +76,7 @@
 
     <Button
         android:id="@+id/logOutBtn"
-        android:layout_width="101dp"
+        android:layout_width="121dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
         android:backgroundTint="@color/Sunglow"

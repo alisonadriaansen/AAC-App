@@ -2,6 +2,7 @@ package com.alison.aac_app.sentence_logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class BuildSentenceV2 {
@@ -20,10 +21,22 @@ public class BuildSentenceV2 {
     private static List<String> filterSentences(List<String> sentences, List<String> userWords) {
         List<String> filteredSentences = new ArrayList<>();
 
+        List<String> lowercaseUserWords = userWords.stream()
+                .map(String::toLowerCase).collect(Collectors.toList());
+
         for (String sentence : sentences) {
             boolean containsAllWords = true;
-            for (String word : userWords) {
-                if (!sentence.toLowerCase().contains(word.toLowerCase() + " ")) {
+            String lowercaseSentence = sentence.toLowerCase();
+            String[] wordsInSentence = lowercaseSentence.split("\\s+");
+            for (String word : lowercaseUserWords) {
+                boolean containsWord = false;
+                for (String sentenceWord : wordsInSentence) {
+                    if (sentenceWord.equals(word)) {
+                        containsWord = true;
+                        break;
+                    }
+                }
+                if (!containsWord) {
                     containsAllWords = false;
                     break;
                 }
@@ -32,8 +45,8 @@ public class BuildSentenceV2 {
                 filteredSentences.add(sentence);
             }
         }
-
         return filteredSentences;
     }
+
 
 }
